@@ -98,7 +98,7 @@ services:
             - 'traefik.enable=true'
             # Here we have to define the URL
             # More details https://doc.traefik.io/traefik/v2.0/routing/routers/#rule
-            - 'traefik.http.routers.saas-crm.rule=HostRegexp(`laravel-app.localhost`, `{subdomain:[a-z]+}.laravel-app.localhost`)'
+            - 'traefik.http.routers.laravel-app.rule=HostRegexp(`laravel-app.localhost`, `{subdomain:[a-z]+}.laravel-app.localhost`)'
             - 'traefik.http.routers.laravel-app.entrypoints=web'
             - 'traefik.docker.network=web'
             - 'traefik.http.services.laravel-app.loadbalancer.server.port=80'
