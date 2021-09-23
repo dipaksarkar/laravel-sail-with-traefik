@@ -1,7 +1,7 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    laravel:
+    laravel-app:
         build:
             context: ./vendor/laravel/sail/runtimes/8.0
             dockerfile: Dockerfile
@@ -17,13 +17,13 @@ services:
             # This is enableing treafik to proxy this service
             - 'traefik.enable=true'
             # Here we have to define the URL
-            - 'traefik.http.routers.laravel.rule=Host(`laravel.localhost`, `api.laravel.localhost`, `app.laravel.localhost`)'
+            - 'traefik.http.routers.laravel-app.rule=Host(`laravel-app.localhost`, `api.laravel-app.localhost`, `app.laravel-app.localhost`)'
             # Here we are defining wich entrypoint should be used by clients to access this service
-            - 'traefik.http.routers.laravel.entrypoints=web'
+            - 'traefik.http.routers.laravel-app.entrypoints=web'
             # Here we define in wich network treafik can find this service
             - 'traefik.docker.network=web'
             # This is the port that traefik should proxy
-            - 'traefik.http.services.laravel.loadbalancer.server.port=80'
+            - 'traefik.http.services.laravel-app.loadbalancer.server.port=80'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1

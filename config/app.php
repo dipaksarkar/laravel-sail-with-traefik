@@ -44,16 +44,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | API URL
+    | App Domains
     |--------------------------------------------------------------------------
     |
-    | This URL is used to limit access to the API
+    | This domains is used to limit access to the app
     |
     */
 
-    'main_url' => env('MAIN_URL', 'laravel.localhost'),
-    'web_url' => env('WEB_URL', 'app.laravel.localhost'),
-    'api_url' => env('API_URL', 'api.laravel.localhost'),
+    'web_domain' => env('WEB_DOMAIN', 'laravel-app.localhost'),
+    'app_domain' => env('APP_DOMAIN', 'app.laravel-app.localhost'),
+    'api_domain' => env('API_DOMAIN', 'api.laravel-app.localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -66,7 +66,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://laravel-app.localhost'),
 
     'asset_url' => env('ASSET_URL', null),
 

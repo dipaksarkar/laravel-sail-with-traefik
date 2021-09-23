@@ -145,10 +145,10 @@ volumes:
 ## Setup .env
 ```
 APP_URL=http://laravel-app.localhost
-APP_SERVICE=laravel-app
+WEB_DOMAIN=laravel-app.localhost
+APP_DOMAIN=app.laravel-app.localhost
+API_DOMAIN=api.laravel-app.localhost
 
-# app routes url setup
-MAIN_URL=laravel-app.localhost
-WEB_URL=app.laravel-app.localhost
-API_URL=api.laravel-app.localhost
+# Docker container service name
+APP_SERVICE=laravel-app
 ```
