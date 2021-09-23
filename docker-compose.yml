@@ -17,7 +17,8 @@ services:
             # This is enableing treafik to proxy this service
             - 'traefik.enable=true'
             # Here we have to define the URL
-            - 'traefik.http.routers.laravel-app.rule=Host(`laravel-app.localhost`, `api.laravel-app.localhost`, `app.laravel-app.localhost`)'
+            # More details https://doc.traefik.io/traefik/v2.0/routing/routers/#rule
+            - 'traefik.http.routers.saas-crm.rule=HostRegexp(`saas-crm.localhost`, `{subdomain:[a-z]+}.saas-crm.localhost`)'
             # Here we are defining wich entrypoint should be used by clients to access this service
             - 'traefik.http.routers.laravel-app.entrypoints=web'
             # Here we define in wich network treafik can find this service
