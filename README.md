@@ -6,42 +6,23 @@ We will call it "web". We are creating this network so that different docker-com
 ```
 docker network create web
 ```
-
 ## Create traefik container
 We could do this by running a simple docker command, but in this case ware a using a small docker-compose file to configure our container.
 
 ```
-version: '3'
+# Go to traefik directory
+cd traefik
 
-networks:
-  web:
-    external: true
+# If it's the firt install of mkcert, run
+mkcert -install
 
-services:
-  traefik:
-    image: traefik:v2.3
-    command:
-      - "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-    restart: always
-    ports:
-      - "80:80"
-      - "8080:8080" # The Web UI (enabled by --api)
-    networks:
-      - web
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-```
+# Generate certificate for domain "docker.localhost", "domain.local" and their sub-domains
+mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.localhost" "*.docker.localhost" "domain.local" "*.domain.local"
 
-Save this file in a directory and start the container by typing
-
-```
+# Start traefik container 
 docker-compose up -d
 ```
-After the container started successfully we can access the traefik dashboard via http://localhost:8080
+After the container started successfully we can access the traefik dashboard via http://traefik.docker.localhost
 
 ## Website setup
 Now we are starting a small web project. For example this is only a small website.
@@ -64,17 +45,17 @@ services:
             # This is enableing treafik to proxy this service
             - "traefik.enable=true"
             # Here we have to define the URL
-            - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
-            # Here we are defining wich entrypoint should be used by clients to access this service
-            - "traefik.http.routers.whoami.entrypoints=web"
+            - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
             # Here we define in wich network treafik can find this service
             - "traefik.docker.network=web"
             # This is the port that traefik should proxy
             - "traefik.http.services.whoami.loadbalancer.server.port=80"
+            # Activation of TLS
+            - "traefik.http.routers.whoami.tls=true"
         restart: always
 ```
 
-Now we can access the website via http://whoami.localhost
+Now we can access the website via http://whoami.docker.localhost
 
 ## Laravel Sail Setup
 Now we are starting a laravel web project where we will add three domain for main, app and api. For example laravel-app.localhost, api.laravel-app.localhost, app.laravel-app.localhost
@@ -99,9 +80,10 @@ services:
             # Here we have to define the URL
             # More details https://doc.traefik.io/traefik/v2.0/routing/routers/#rule
             - 'traefik.http.routers.laravel-app.rule=HostRegexp(`laravel-app.localhost`, `{subdomain:[a-z]+}.laravel-app.localhost`)'
-            - 'traefik.http.routers.laravel-app.entrypoints=web'
             - 'traefik.docker.network=web'
             - 'traefik.http.services.laravel-app.loadbalancer.server.port=80'
+            # Activation of TLS
+            - "traefik.http.routers.whoami.tls=true"
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -153,3 +135,6 @@ API_DOMAIN=api.laravel-app.localhost
 # Docker container service name
 APP_SERVICE=laravel-app
 ```
+
+
+# mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.localhost" "*.docker.localhost" "gomedia.localhost" "*.gomedia.localhost"
