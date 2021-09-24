@@ -135,6 +135,3 @@ API_DOMAIN=api.laravel-app.localhost
 # Docker container service name
 APP_SERVICE=laravel-app
 ```
-
-
-# mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.localhost" "*.docker.localhost" "gomedia.localhost" "*.gomedia.localhost"
